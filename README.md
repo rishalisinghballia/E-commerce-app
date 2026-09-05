@@ -1,3 +1,6 @@
+```
+https://www.youtube.com/watch?v=0rDIt3dlrV4
+```
 # 🛍️ EasyShop - Modern E-commerce Platform
 
 [![Next.js](https://img.shields.io/badge/Next.js-14.1.0-black?style=flat-square&logo=next.js)](https://nextjs.org/)
