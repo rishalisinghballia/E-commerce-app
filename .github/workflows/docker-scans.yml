@@ -18,3 +18,51 @@ jobs:
               uses: hadolint/hadolint-action@v3.1.0
               with:
                 dockerfile: scripts/Dockerfile.migration
+
+            # -------------------------
+            # Build Main Image
+            # -------------------------
+
+            - name: Build Main Docker Image
+              run: |
+                docker build \
+                    -f Dockerfile \
+                    -t ${{ vars.DOCKERHUB_USERNAME }}/e-commerce-app:latest .
+
+            # -------------------------
+            # Build Migration Image
+            # -------------------------
+
+            - name: Build Migration Docker Image
+              run: |
+                docker build \
+                    -f scripts/Dockerfile.migration \
+                    -t ${{ vars.DOCKERHUB_USERNAME }}/e-commerce-migration:latest .
+
+            # -------------------------
+            # Trivy - Main Image
+            # -------------------------
+
+            - name: Trivy Scan - Main
+              uses: aquasecurity/trivy-action@v0.36.0
+              with:
+                image-ref: '${{ vars.DOCKERHUB_USERNAME }}/e-commerce-app:latest'
+                format: 'table'
+                exit-code: '1'
+                ignore-unfixed: true
+                vuln-type: 'os,library'
+                severity: 'HIGH,CRITICAL'
+
+            # -------------------------
+            # Trivy - Migration Image
+            # -------------------------
+
+            - name: Trivy Scan - Migration
+              uses: aquasecurity/trivy-action@v0.36.0
+              with:
+                image-ref: '${{ vars.DOCKERHUB_USERNAME }}/e-commerce-migration:latest'
+                format: 'table'
+                exit-code: '1'
+                ignore-unfixed: true
+                vuln-type: 'os,library'
+                severity: 'HIGH,CRITICAL'
