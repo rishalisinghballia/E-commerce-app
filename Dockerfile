@@ -1,14 +1,14 @@
 # Stage 1: Development/Build Stage
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Set working directory
 WORKDIR /app
 
 # Install necessary build dependencies
 RUN apk add --no-cache \
-    python3=3.12.14-r0 \
-    make=4.4.1-r2 \
-    g++=14.2.0-r4
+    python3 \
+    make \
+    g++
 
 # Copy package files
 COPY package*.json ./
@@ -23,7 +23,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production Stage
-FROM node:18-alpine AS runner
+FROM node:20-alpine AS runner
 
 # Set working directory
 WORKDIR /app
