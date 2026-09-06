@@ -5,7 +5,3 @@ const config = {
 };
 
 module.exports = config;
-
-// intentionally adding failure condition
-
-// const testLint = "hello";
