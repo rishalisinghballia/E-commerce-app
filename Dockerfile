@@ -5,7 +5,10 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Install necessary build dependencies
-RUN apk add --no-cache python3 make g++
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++
 
 # Copy package files
 COPY package*.json ./
