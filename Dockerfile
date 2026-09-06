@@ -26,8 +26,11 @@ RUN npm run build
 # Stage 2: Production Stage - Alpine with latest security patches and non-root user
 FROM alpine:3.21 
 
-# Install Node.js runtime (latest available in Alpine 3.21)
-RUN apk add --no-cache nodejs npm dumb-init
+# Install Node.js runtime with pinned versions to comply with DL3018
+RUN apk add --no-cache \
+    nodejs=22.23.2-r0 \
+    npm=10.9.1-r0 \
+    dumb-init=1.2.5-r3
 
 # Set working directory
 WORKDIR /app
