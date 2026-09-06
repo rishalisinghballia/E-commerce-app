@@ -1,5 +1,5 @@
 # Stage 1: Development/Build Stage
-FROM node:20-alpine AS builder
+FROM node:20-alpine3.21 AS builder
 
 # Set working directory
 WORKDIR /app
@@ -24,22 +24,33 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production Stage
-FROM node:20-alpine AS runner
+FROM node:20-alpine3.21 AS runner
 
 # Set working directory
 WORKDIR /app
 
-# Copy necessary files from builder stage
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/public ./public
+# Create non-root user for security
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
+
+# Copy necessary files from builder stage with proper ownership
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
 # Set environment variables
 ENV NODE_ENV=production
 ENV PORT=3000
 
+# Switch to non-root user
+USER nextjs
+
 # Expose the port the app runs on
 EXPOSE 3000
+
+# Healthcheck to verify container is healthy
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
 
 # Command to run the application
 CMD ["node", "server.js"]
