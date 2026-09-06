@@ -6,9 +6,9 @@ WORKDIR /app
 
 # Install necessary build dependencies
 RUN apk add --no-cache \
-    python3 \
-    make \
-    g++
+    python3=3.12.14-r0 \
+    make=4.4.1-r2 \
+    g++=14.2.0-r4
 
 # Copy package files
 COPY package*.json ./
