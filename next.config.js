@@ -8,4 +8,4 @@ module.exports = config;
 
 // intentionally adding failure condition
 
-const testLint = ;
+const testLint = "hello";
