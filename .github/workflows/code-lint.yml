@@ -1,0 +1,21 @@
+name: Code Quality
+on:
+    workflow_call:
+
+jobs:
+    Code-Quality:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v7
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: '18'
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Run ESLint
+              run: npm run lint
