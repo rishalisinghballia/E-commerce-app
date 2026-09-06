@@ -23,8 +23,11 @@ COPY . .
 # Build the Next.js application
 RUN npm run build
 
-# Stage 2: Production Stage
-FROM node:20-alpine3.21 AS runner
+# Stage 2: Production Stage - Alpine with latest security patches and non-root user
+FROM alpine:3.21 
+
+# Install Node.js runtime (latest available in Alpine 3.21)
+RUN apk add --no-cache nodejs npm dumb-init
 
 # Set working directory
 WORKDIR /app
@@ -47,6 +50,9 @@ USER nextjs
 
 # Expose the port the app runs on
 EXPOSE 3000
+
+# Use dumb-init to handle signals properly
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
 # Healthcheck to verify container is healthy
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
