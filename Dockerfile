@@ -1,14 +1,14 @@
 # Stage 1: Development/Build Stage
-FROM node:20-alpine3.21 AS builder
+FROM node:20-alpine AS builder
 
 # Set working directory
 WORKDIR /app
 
 # Install necessary build dependencies
 RUN apk add --no-cache \
-    python3=3.12.14-r0 \
-    make=4.4.1-r2 \
-    g++=14.2.0-r4
+    python3 \
+    make \
+    g++
 
 
 # Copy package files
@@ -24,13 +24,13 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production Stage - Alpine with latest security patches and non-root user
-FROM alpine:3.21 
+FROM alpine:latest
 
-# Install Node.js runtime with pinned versions to comply with DL3018
-RUN apk add --no-cache \
-    nodejs=22.23.2-r0 \
-    npm=10.9.1-r0 \
-    dumb-init=1.2.5-r3
+# Update base image packages to patch vulnerabilities
+RUN apk update && apk upgrade && apk add --no-cache \
+    nodejs \
+    npm \
+    dumb-init
 
 # Set working directory
 WORKDIR /app
