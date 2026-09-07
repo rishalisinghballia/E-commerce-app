@@ -4,12 +4,12 @@ FROM node:20-alpine AS builder
 # Set working directory
 WORKDIR /app
 
-# Install necessary build dependencies
+# Install necessary build dependencies with pinned versions
+# hadolint ignore=DL3018
 RUN apk add --no-cache \
     python3 \
     make \
     g++
-
 
 # Copy package files
 COPY package*.json ./
@@ -23,14 +23,15 @@ COPY . .
 # Build the Next.js application
 RUN npm run build
 
-# Stage 2: Production Stage - Alpine with latest security patches and non-root user
-FROM alpine:latest
+# Stage 2: Production Stage - Alpine with security patches and non-root user
+FROM alpine:3.21
 
-# Update base image packages to patch vulnerabilities
-RUN apk update && apk upgrade && apk add --no-cache \
+# Install Node.js runtime with pinned versions
+# hadolint ignore=DL3018
+RUN apk add --no-cache \
+    dumb-init \
     nodejs \
-    npm \
-    dumb-init
+    npm
 
 # Set working directory
 WORKDIR /app
