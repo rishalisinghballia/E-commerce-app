@@ -34,7 +34,7 @@ COPY --from=builder --chown=nodejs:nodejs /app/tsconfig.json ./
 COPY --from=builder --chown=nodejs:nodejs /app/scripts ./scripts
 
 # Copy database
-COPY --chown=nodejs:nodejs db ./db
+COPY --chown=nodejs:nodejs .db ./.db
 
 USER nodejs
 
