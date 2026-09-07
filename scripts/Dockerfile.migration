@@ -1,13 +1,15 @@
-# Build stage - use node with build tools
+#syntax=docker/dockerfile:1
+
+# Build stage - use standard node (build tools needed)
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Install build dependencies with pinned versions
+# Install build dependencies
 RUN apk add --no-cache \
-    python3=3.12.14-r0 \
-    make=4.4.1-r3 \
-    g++=15.2.0-r2
+    python3 \
+    make \
+    g++
 
 # Copy package files and TypeScript configuration
 COPY package*.json tsconfig.json ./
@@ -18,25 +20,21 @@ COPY scripts ./scripts
 # Install dependencies
 RUN npm install
 
-# Runtime stage - minimal hardened image without build tools
-FROM node:20-alpine
+# Runtime stage - use DHI hardened node image for security
+FROM dhi.io/node:20-alpine3.21
 
 WORKDIR /app
 
-# Create non-root user for enhanced security
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nodejs -u 1001
-
 # Copy compiled modules and scripts from builder
-COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=nodejs:nodejs /app/package*.json ./
-COPY --from=builder --chown=nodejs:nodejs /app/tsconfig.json ./
-COPY --from=builder --chown=nodejs:nodejs /app/scripts ./scripts
+COPY --from=builder --chown=node:node /app/node_modules ./node_modules
+COPY --from=builder --chown=node:node /app/package*.json ./
+COPY --from=builder --chown=node:node /app/tsconfig.json ./
+COPY --from=builder --chown=node:node /app/scripts ./scripts
 
 # Copy database
-COPY --chown=nodejs:nodejs .db ./.db
+COPY --chown=node:node .db ./.db
 
-USER nodejs
+USER node
 
 ENV NODE_ENV=production
 
