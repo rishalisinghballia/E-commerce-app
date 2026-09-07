@@ -1,0 +1,14 @@
+{
+  "name": "migration-app",
+  "version": "1.0.0",
+  "description": "Data migration application",
+  "main": "scripts/migrate-data.ts",
+  "scripts": {
+    "migrate": "ts-node --project scripts/tsconfig.json scripts/migrate-data.ts"
+  },
+  "dependencies": {
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {}
+}
