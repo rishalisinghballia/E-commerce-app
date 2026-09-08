@@ -11,3 +11,8 @@ jobs:
         uses: ./.github/workflows/secret-scanning.yml
     Docker-Scans:
         uses: ./.github/workflows/docker-scans.yml
+    Sonar-Scan:
+        uses: ./.github/workflows/sonar-scan.yml
+    Image-Push:
+        needs: [Code-Quality, Secret-Scanning, Docker-Scans, Sonar-Scan]
+        uses: ./.github/workflows/image-push.yml
