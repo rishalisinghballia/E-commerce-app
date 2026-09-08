@@ -25,5 +25,6 @@ jobs:
                 docker push ${{ vars.DOCKERHUB_USERNAME }}/easyshop:latest
                 cd scripts
                 docker build \
+                    -f scripts/Dockerfile.migration \
                     -t ${{ vars.DOCKERHUB_USERNAME }}/easyshop-migration:latest .
                 docker push ${{ vars.DOCKERHUB_USERNAME }}/easyshop-migration:latest
