@@ -18,12 +18,13 @@ jobs:
                 username: ${{ vars.DOCKERHUB_USERNAME }}
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-            - name: Build and Push Docker Image
+            - name: Build and Push Main Docker Image
               run: |
                 docker build \
                     -t ${{ vars.DOCKERHUB_USERNAME }}/easyshop:latest .
                 docker push ${{ vars.DOCKERHUB_USERNAME }}/easyshop:latest
-                cd scripts
+            - name: Build and Push Migration Docker Image
+              run: |
                 docker build \
                     -f scripts/Dockerfile.migration \
                     -t ${{ vars.DOCKERHUB_USERNAME }}/easyshop-migration:latest .
