@@ -6,6 +6,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Install build dependencies
+# hadolint ignore=DL3018
 RUN apk add --no-cache \
     python3 \
     make \
@@ -32,7 +33,7 @@ COPY --from=builder --chown=node:node /app/tsconfig.json ./
 COPY --from=builder --chown=node:node /app/scripts ./scripts
 
 # Copy database
-COPY --chown=node:node .db ./.db
+COPY --chown=node:node db ./.db
 
 USER node
 
