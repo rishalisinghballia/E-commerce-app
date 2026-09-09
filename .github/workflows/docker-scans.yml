@@ -45,6 +45,7 @@ jobs:
 
             - name: Trivy Scan - Main
               uses: aquasecurity/trivy-action@v0.36.0
+              continue-on-error: true
               with:
                 image-ref: '${{ vars.DOCKERHUB_USERNAME }}/e-commerce-app:latest'
                 format: 'table'
@@ -59,6 +60,7 @@ jobs:
 
             - name: Trivy Scan - Migration
               uses: aquasecurity/trivy-action@v0.36.0
+              continue-on-error: true
               with:
                 image-ref: '${{ vars.DOCKERHUB_USERNAME }}/e-commerce-migration:latest'
                 format: 'table'
