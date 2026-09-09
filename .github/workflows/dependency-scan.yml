@@ -1,0 +1,42 @@
+name: Dependency-Scan
+on:
+    workflow_call:
+
+jobs:
+    Dependency-Scan:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v7
+
+            - name: Set up Node js
+              uses: actions/setup-node@v4
+              with:
+                node-version: 20
+                cache: 'npm'
+
+            - name: Install Dependencies
+              run: npm ci
+
+            - name: NPM Audit
+              run: npm audit --audit-level=high
+              continue-on-error: true    # use this when you want to continue the workflow even if the scan fails
+
+            - name: oWASP Dependency Check
+              uses: dependency-check/Dependency-Check_Action@main
+              continue-on-error: true      # use this when you want to continue the workflow even if the scan fails
+              id: dependency-check
+              with:
+                project: 'easyshop'
+                path: '.'
+                format: 'HTML'
+                out: 'reports'
+                args: >
+                    --failOnCVSS 7
+
+            - name: Upload Dependency Check Report
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                name: dependency-check-report
+                path: ${{ github.workspace }}/reports

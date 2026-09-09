@@ -9,12 +9,14 @@ jobs:
         uses: ./.github/workflows/code-lint.yml
     Secret-Scanning:
         uses: ./.github/workflows/secret-scanning.yml
+    Dependency-Scan:
+        uses: ./.github/workflows/dependency-scan.yml
     Docker-Scans:
         uses: ./.github/workflows/docker-scans.yml
     Sonar-Scan:
         uses: ./.github/workflows/sonar-scan.yml
         secrets: inherit
     Image-Push:
-        needs: [Code-Quality, Secret-Scanning, Docker-Scans, Sonar-Scan]
+        needs: [Code-Quality, Secret-Scanning,Dependency-Scan, Docker-Scans, Sonar-Scan]
         uses: ./.github/workflows/image-push.yml
         secrets: inherit
