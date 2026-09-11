@@ -1,6 +1,6 @@
 #syntax=docker/dockerfile:1
 
-# Build stage - use standard node (build tools needed)
+# Build stage
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -21,12 +21,12 @@ COPY scripts ./scripts
 # Install dependencies
 RUN npm install
 
-# Runtime stage - use DHI hardened node image for security
+# Runtime stage - DHI hardened Node image
 FROM dhi.io/node:20-alpine3.21
 
 WORKDIR /app
 
-# Copy compiled modules and scripts from builder
+# Copy dependencies and application files
 COPY --from=builder --chown=node:node /app/node_modules ./node_modules
 COPY --from=builder --chown=node:node /app/package*.json ./
 COPY --from=builder --chown=node:node /app/tsconfig.json ./
@@ -43,5 +43,5 @@ ENV NODE_ENV=production
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD node -e "console.log('OK')" || exit 1
 
-# Run migration
-CMD ["npx", "ts-node", "--project", "scripts/tsconfig.json", "scripts/migrate-data.ts"]
+# Run migration without npx
+CMD ["./node_modules/.bin/ts-node", "--project", "scripts/tsconfig.json", "scripts/migrate-data.ts"]
