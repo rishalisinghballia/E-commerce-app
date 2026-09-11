@@ -1,3 +1,5 @@
+# This module creates and Pod Identity association for the EBS CSI controller. It is required to allow the EBS CSI controller to create and manage EBS volumes in your AWS account.
+
 module "ebs_csi_pod_identity" {
   source  = "terraform-aws-modules/eks-pod-identity/aws"
   version = "~> 2.7"
