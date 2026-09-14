@@ -50,7 +50,7 @@ jobs:
             
             - name: Commit and push GitOps change
               run: |
-                cd gitops
+                cd apps/easyshop
 
                 git config user.name "github-actions[bot]"
                 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
