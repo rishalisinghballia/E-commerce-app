@@ -3,6 +3,9 @@ name: Image-Push
 on:
     workflow_call:
 
+env:
+  IMAGE_TAG: ${{ github.ref_name }}
+
 jobs:
     Image-Push:
         runs-on: ubuntu-latest
@@ -21,11 +24,11 @@ jobs:
             - name: Build and Push Main Docker Image
               run: |
                 docker build \
-                    -t ${{ vars.DOCKERHUB_USERNAME }}/easyshop:latest .
-                docker push ${{ vars.DOCKERHUB_USERNAME }}/easyshop:latest
+                    -t ${{ vars.DOCKERHUB_USERNAME }}/easyshop:${IMAGE_TAG} .
+                docker push ${{ vars.DOCKERHUB_USERNAME }}/easyshop:${IMAGE_TAG}
             - name: Build and Push Migration Docker Image
               run: |
                 docker build \
                     -f scripts/Dockerfile.migration \
-                    -t ${{ vars.DOCKERHUB_USERNAME }}/easyshop-migration:latest .
-                docker push ${{ vars.DOCKERHUB_USERNAME }}/easyshop-migration:latest
+                    -t ${{ vars.DOCKERHUB_USERNAME }}/easyshop-migration:${IMAGE_TAG} .
+                docker push ${{ vars.DOCKERHUB_USERNAME }}/easyshop-migration:${IMAGE_TAG}
