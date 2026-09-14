@@ -32,3 +32,31 @@ jobs:
                     -f scripts/Dockerfile.migration \
                     -t ${{ vars.DOCKERHUB_USERNAME }}/easyshop-migration:${IMAGE_TAG} .
                 docker push ${{ vars.DOCKERHUB_USERNAME }}/easyshop-migration:${IMAGE_TAG}
+
+            - name: Checkout GitOps repository
+              uses: actions/checkout@v4
+              with:
+                repository: rishindrasingh/rishindra-gitops
+                token: ${{ secrets.GITOPS_TOKEN }}
+                path: apps/easyshop
+              
+            - name: Update EasyShop image
+              run: |
+                cd apps/easyshop
+                sed -i "s|image: rishindra2308/easyshop:.*|image: rishindra2308/easyshop:${GITHUB_REF_NAME}|" \
+                  apps/easyshop/07-easyshop-deployment.yaml
+                sed -i "s|image: rishindra2308/easyshop-migration:.*|image: rishindra2308/easyshop-migration:${GITHUB_REF_NAME}|" \
+                  apps/easyshop/11-migration-job.yaml
+            
+            - name: Commit and push GitOps change
+              run: |
+                cd gitops
+
+                git config user.name "github-actions[bot]"
+                git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+                git add apps/easyshop/*
+
+                git commit -m "Update easyshop image to ${IMAGE_TAG}"
+
+                git push
