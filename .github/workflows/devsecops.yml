@@ -3,6 +3,8 @@ name: DevSecOpsCI
 on:
     push:
         branches: [ devops ]
+        tags:
+        - 'v*.*.*'
 
 jobs:
     Code-Quality:
