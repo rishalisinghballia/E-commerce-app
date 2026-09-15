@@ -3,7 +3,7 @@ name: DevSecOpsCI
 on:
   pull_request:
     branches:
-      - main
+      - devops
 
 jobs:
 
