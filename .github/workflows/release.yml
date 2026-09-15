@@ -1,0 +1,11 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+      Image-Push:
+        uses: ./.github/workflows/image-push.yml
+        secrets: inherit
