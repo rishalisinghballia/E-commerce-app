@@ -2,32 +2,23 @@ name: DevSecOpsCI
 
 on:
   pull_request:
-    types:
-      - closed
     branches:
-      - devops
+      - main
 
 jobs:
 
   Code-Quality:
-    if: github.event.pull_request.merged == true
     uses: ./.github/workflows/code-lint.yml
 
   Secret-Scanning:
-    if: github.event.pull_request.merged == true
     uses: ./.github/workflows/secret-scanning.yml
 
   Dependency-Scan:
-    if: github.event.pull_request.merged == true
     uses: ./.github/workflows/dependency-scan.yml
 
   Docker-Scans:
-    if: github.event.pull_request.merged == true
     uses: ./.github/workflows/docker-scans.yml
 
   Sonar-Scan:
-    if: github.event.pull_request.merged == true
     uses: ./.github/workflows/sonar-scan.yml
     secrets: inherit
-
-# Added a comment line to test the workflow
