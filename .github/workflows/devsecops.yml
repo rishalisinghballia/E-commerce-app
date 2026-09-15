@@ -34,3 +34,5 @@ jobs:
       - Docker-Scans
     uses: ./.github/workflows/image-push.yml
     secrets: inherit
+
+# Added a comment line to test the workflow
