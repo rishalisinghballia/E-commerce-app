@@ -1,38 +1,33 @@
 name: DevSecOpsCI
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - devops
-    tags:
-      - 'v*.*.*'
 
 jobs:
 
   Code-Quality:
+    if: github.event.pull_request.merged == true
     uses: ./.github/workflows/code-lint.yml
 
   Secret-Scanning:
+    if: github.event.pull_request.merged == true
     uses: ./.github/workflows/secret-scanning.yml
 
   Dependency-Scan:
+    if: github.event.pull_request.merged == true
     uses: ./.github/workflows/dependency-scan.yml
 
   Docker-Scans:
+    if: github.event.pull_request.merged == true
     uses: ./.github/workflows/docker-scans.yml
 
   Sonar-Scan:
+    if: github.event.pull_request.merged == true
     uses: ./.github/workflows/sonar-scan.yml
-    secrets: inherit
-
-  Image-Push:
-    if: startsWith(github.ref, 'refs/tags/v')
-    needs:
-      - Code-Quality
-      - Secret-Scanning
-      - Dependency-Scan
-      - Docker-Scans
-    uses: ./.github/workflows/image-push.yml
     secrets: inherit
 
 # Added a comment line to test the workflow
