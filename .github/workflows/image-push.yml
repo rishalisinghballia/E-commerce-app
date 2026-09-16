@@ -36,7 +36,7 @@ jobs:
             - name: Checkout GitOps repository
               uses: actions/checkout@v4
               with:
-                repository: rishindrasingh/rishindra-gitops
+                repository: rishalisinghballia/rishindra-gitops
                 token: ${{ secrets.GIT_TOKEN }}
                 path: apps/easyshop
               
