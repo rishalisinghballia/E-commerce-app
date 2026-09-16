@@ -22,3 +22,5 @@ jobs:
   Sonar-Scan:
     uses: ./.github/workflows/sonar-scan.yml
     secrets: inherit
+
+#added comment to test the workflow
