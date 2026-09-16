@@ -23,4 +23,3 @@ jobs:
     uses: ./.github/workflows/sonar-scan.yml
     secrets: inherit
 
-#added comment to test the workflow for testing purposes
